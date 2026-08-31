@@ -1,577 +1,501 @@
 /* ============================================================
-   Punk Records — Design System
-   ============================================================
-   Color palette:
-     --bg-*        dark navy tones (tool feel — designed for low-light field use)
-     --surface-*   card/panel surfaces
-     --accent-*    DL-blue primary actions
-     --flag-*      amber/red warning for mismatches
-     --ok-*        emerald for clean/verified states
-     --seed-*      violet accent for seeded-preview banners
-     --text-*      typography scale
-
-   Typography: 'Inter' — high legibility, widely available.
+   Punk Records — "The Government File" Design System
+   Visual language grounded in Indian bureaucratic paperwork:
+   Manila dossiers, red-tape binding, rubber ink stamps, ruled paper.
+   FLAT COLOR ONLY — NO GRADIENTS, NO FLOATING SaaS CARDS.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap');
 
 :root {
-  --bg-void:       #07090f;
-  --bg-base:       #0b0f1a;
-  --bg-panel:      #111827;
-  --bg-card:       #161d2e;
-  --bg-hover:      #1a2236;
+  /* Core Government File Palette */
+  --paper:        #DCD6C6; /* base background — aged file-folder tan */
+  --paper-dark:   #CCC5B3; /* inactive tab background / deeper manila layer */
+  --ink:          #2B2A28; /* primary text — warm charcoal */
+  --ink-muted:    #5A5853; /* secondary administrative markings */
+  --tape-red:     #9B2226; /* primary accent — seal/red-tape red */
+  --stamp-green:  #3A5A40; /* verified / clean state */
+  --flag-ochre:   #C97A2B; /* flagged / mismatch state */
+  --carbon-slate: #4B5A6A; /* seeded / disclosed-preview banner */
+  --rule-line:    #B8AF98; /* hairline dividers, ruled-paper lines */
+  --rule-line-dark: #A49A80;
 
-  --surface-0:     rgba(22, 29, 46, 0.95);
-  --surface-1:     rgba(26, 34, 54, 0.9);
-
-  --border-subtle: rgba(255,255,255,0.06);
-  --border-mid:    rgba(255,255,255,0.11);
-
-  --accent-500:    #3b82f6;
-  --accent-600:    #2563eb;
-  --accent-400:    #60a5fa;
-  --accent-glow:   rgba(59, 130, 246, 0.18);
-
-  --flag-amber:    #f59e0b;
-  --flag-red:      #ef4444;
-  --flag-bg:       rgba(239, 68, 68, 0.08);
-  --flag-border:   rgba(239, 68, 68, 0.3);
-  --flag-amber-bg: rgba(245, 158, 11, 0.1);
-  --flag-amber-border: rgba(245, 158, 11, 0.35);
-
-  --ok-500:        #10b981;
-  --ok-400:        #34d399;
-  --ok-bg:         rgba(16, 185, 129, 0.08);
-  --ok-border:     rgba(16, 185, 129, 0.3);
-
-  --seed-500:      #8b5cf6;
-  --seed-400:      #a78bfa;
-  --seed-bg:       rgba(139, 92, 246, 0.1);
-  --seed-border:   rgba(139, 92, 246, 0.35);
-
-  --text-primary:   #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted:     #475569;
-  --text-disabled:  #334155;
-
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   16px;
-  --radius-xl:   22px;
-
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
-  --shadow-flag: 0 4px 24px rgba(239,68,68,0.12), 0 1px 4px rgba(0,0,0,0.2);
+  /* Typography */
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans:  'IBM Plex Sans', -apple-system, sans-serif;
+  --font-mono:  'IBM Plex Mono', monospace;
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html, body, #root {
-  height: 100%;
-  background: var(--bg-base);
-  color: var(--text-primary);
-  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100%;
+  background: #C8C1AE; /* Desk surface behind the file dossier */
+  color: var(--ink);
+  font-family: var(--font-sans);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Layout ─────────────────────────────────────────────────── */
+/* ── Dossier Shell ─────────────────────────────────────────── */
 .app-shell {
+  max-width: 960px;
+  margin: 1.5rem auto 3rem;
+  padding: 0 1rem;
+}
+
+/* ── Folder Tab Navigation ──────────────────────────────────── */
+.folder-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 0;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.folder-tabs {
+  display: flex;
+  list-style: none;
+  gap: 4px;
+  margin-left: 2rem; /* Aligns with document body past the punch holes */
+}
+
+.folder-tab {
+  display: inline-block;
+  padding: 0.6rem 1.4rem 0.5rem;
+  background: var(--paper-dark);
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid var(--rule-line-dark);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  top: 2px;
+  transition: none;
+}
+
+.folder-tab:hover {
+  color: var(--ink);
+  background: #D4CDBC;
+}
+
+.folder-tab.active {
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-bottom: 2px solid var(--paper); /* Seamless attachment to dossier */
+  font-weight: 700;
+  top: 2px;
+  padding-top: 0.65rem;
+  z-index: 12;
+}
+
+.folder-tab:focus-visible {
+  outline: 2px solid var(--tape-red);
+  outline-offset: -2px;
+}
+
+.dossier-serial {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  padding-bottom: 0.35rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Main Dossier Sheet ─────────────────────────────────────── */
+.dossier-sheet {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-top: none;
+  display: flex;
+  min-height: 600px;
+  position: relative;
+}
+
+/* ── Punch-Hole Left Margin ─────────────────────────────────── */
+.punch-hole-margin {
+  width: 44px;
+  flex-shrink: 0;
+  border-right: 1px dashed var(--rule-line-dark);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-}
-
-.page-content {
-  flex: 1;
-  padding: 2rem 1.5rem;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* ── Navbar ─────────────────────────────────────────────────── */
-.navbar {
-  background: var(--bg-void);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0 1.5rem;
-  display: flex;
   align-items: center;
-  gap: 2rem;
-  height: 56px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(12px);
+  justify-content: space-around;
+  padding: 3rem 0;
+  background: var(--paper);
 }
 
-.navbar__logo {
-  font-size: 0.9rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: linear-gradient(135deg, var(--accent-400), var(--seed-400));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  white-space: nowrap;
+.punch-hole {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #B4AC98; /* Hole through to underlying folder/desk */
+  border: 1px solid var(--rule-line-dark);
+  box-shadow: inset 1px 1px 2px rgba(43, 42, 40, 0.35);
 }
 
-.navbar__links {
+/* ── Document Page Content ──────────────────────────────────── */
+.dossier-content {
+  flex: 1;
+  padding: 2.25rem 2.5rem 3rem 2.5rem;
+}
+
+/* ── Gazette-Style Header ───────────────────────────────────── */
+.dossier-heading {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dossier-heading__topline {
   display: flex;
-  gap: 0.25rem;
-  list-style: none;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.35rem;
 }
 
-.navbar__links a {
-  display: block;
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-sm);
+.dossier-heading__dept {
+  font-family: var(--font-serif);
   font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color 0.15s, background 0.15s;
+  font-style: italic;
+  color: var(--tape-red);
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
-.navbar__links a:hover { color: var(--text-primary); background: var(--bg-hover); }
-.navbar__links a.active { color: var(--accent-400); background: var(--accent-glow); }
-
-.navbar__scope-tag {
-  margin-left: auto;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  background: var(--bg-panel);
-  border: 1px solid var(--border-subtle);
-  padding: 0.15rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.03em;
-}
-
-/* ── Satellite header ───────────────────────────────────────── */
-.satellite-header {
-  margin-bottom: 1.5rem;
-}
-
-.satellite-header__title {
-  font-size: 1.25rem;
+.dossier-heading__title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
   font-weight: 700;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.25rem;
+  color: var(--ink);
+  line-height: 1.2;
 }
 
-.satellite-header__scope {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  background: var(--bg-panel);
-  border: 1px solid var(--border-subtle);
-  display: inline-block;
-  padding: 0.2rem 0.65rem;
-  border-radius: var(--radius-sm);
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* ── Seeded Banner ──────────────────────────────────────────── */
-.seeded-banner {
-  background: var(--seed-bg);
-  border: 1px solid var(--seed-border);
-  border-radius: var(--radius-md);
-  padding: 0.65rem 1rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--seed-400);
-}
-
-.seeded-banner__icon { font-size: 1rem; flex-shrink: 0; }
-
-/* ── OCR disclaimer ─────────────────────────────────────────── */
-.ocr-disclaimer {
-  font-size: 0.73rem;
-  color: var(--text-muted);
+.dossier-heading__scope {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
   margin-top: 0.35rem;
-  padding: 0.2rem 0.5rem;
-  background: var(--bg-panel);
-  border-left: 2px solid var(--border-mid);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-/* ── Citizen Select ─────────────────────────────────────────── */
-.citizen-select {
+/* ── Ruled Ledger Sections ──────────────────────────────────── */
+.ledger-section {
+  border-top: 1px solid var(--rule-line);
+  padding-top: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.ledger-label {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* ── Form Controls (Government Typewritten Style) ──────────── */
+.citizen-select-box {
   margin-bottom: 1.5rem;
 }
 
-.citizen-select label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.5rem;
-}
-
-.citizen-select select {
+.citizen-select-box select {
   width: 100%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  padding: 0.6rem 0.9rem;
-  font-size: 0.9rem;
-  font-family: inherit;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  -webkit-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232B2A28' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
-  padding-right: 2.25rem;
+  padding-right: 2rem;
 }
 
-.citizen-select select:hover { border-color: var(--accent-500); }
-.citizen-select select:focus { border-color: var(--accent-500); box-shadow: 0 0 0 3px var(--accent-glow); }
-.citizen-select select option { background: var(--bg-card); }
-
-/* ── Result Panel ───────────────────────────────────────────── */
-.result-panel {
-  animation: fadeIn 0.25s ease;
+.citizen-select-box select:focus-visible {
+  outline: 2px solid var(--tape-red);
+  border-color: var(--tape-red);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+.disclaimer-note {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin-top: 0.45rem;
+  line-height: 1.4;
 }
 
-/* ── Clean State card ───────────────────────────────────────── */
-.clean-card {
-  background: var(--bg-card);
-  border: 1px solid var(--ok-border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow-card), 0 0 0 0 var(--ok-500);
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
+.disclaimer-note code {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  background: #D0C9B6;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--rule-line);
 }
 
-.clean-card__header {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+/* ── Rubber Stamps (Verified & Flagged) ──────────────────────── */
+.stamp-container {
+  margin: 1.5rem 0;
+  position: relative;
 }
 
-.clean-card__icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--ok-bg);
-  border: 1px solid var(--ok-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.clean-card__name {
-  font-size: 1.05rem;
+/* Base Stamp Physics & Appearance */
+.rubber-stamp {
+  display: inline-block;
+  padding: 0.65rem 1.25rem;
+  text-transform: uppercase;
+  font-family: var(--font-serif);
   font-weight: 700;
-  color: var(--text-primary);
+  letter-spacing: 0.08em;
+  border-width: 3px;
+  border-style: double;
+  line-height: 1.2;
+  text-align: center;
+  animation: stampDown 0.15s cubic-bezier(0.1, 0.9, 0.2, 1);
+  transform-origin: center center;
 }
 
-.clean-card__status-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
+@keyframes stampDown {
+  0% {
+    transform: scale(1.22) rotate(var(--stamp-angle, 0deg));
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1) rotate(var(--stamp-angle, 0deg));
+    opacity: 0.92;
+  }
 }
 
-.status-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.85rem;
-  background: var(--bg-panel);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-  font-size: 0.82rem;
+@media (prefers-reduced-motion: reduce) {
+  .rubber-stamp {
+    animation: none !important;
+  }
 }
 
-.status-pill__label { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.status-pill__value { font-weight: 600; color: var(--ok-400); }
-.status-pill--ok  .status-pill__indicator { color: var(--ok-400); }
-
-/* ── Flagged State card ─────────────────────────────────────── */
-.flagged-card {
-  background: var(--bg-card);
-  border: 1.5px solid var(--flag-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-flag);
-  overflow: hidden;
+/* Clean State Stamp (Green) */
+.rubber-stamp--clean {
+  --stamp-angle: 1.5deg;
+  transform: rotate(1.5deg);
+  border-color: var(--stamp-green);
+  color: var(--stamp-green);
+  background: transparent;
+  opacity: 0.95;
 }
 
-.flagged-card__header {
-  background: var(--flag-bg);
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-bottom: 1px solid var(--flag-border);
+/* Flagged State Stamp (Ochre) */
+.rubber-stamp--flagged {
+  --stamp-angle: -2.5deg;
+  transform: rotate(-2.5deg);
+  border-color: var(--flag-ochre);
+  color: var(--flag-ochre);
+  background: transparent;
+  opacity: 0.95;
 }
 
-.flagged-card__icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(239,68,68,0.15);
-  border: 1.5px solid var(--flag-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
+.rubber-stamp__title {
+  font-size: 1.15rem;
+  font-weight: 800;
 }
 
-.flagged-card__title {
-  flex: 1;
-}
-
-.flagged-card__name {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.flagged-card__summary {
-  font-size: 0.8rem;
-  color: var(--flag-red);
-  margin-top: 0.1rem;
-  font-weight: 500;
-}
-
-.flagged-card__expand-btn {
-  background: none;
-  border: 1px solid var(--flag-border);
-  color: var(--text-secondary);
-  padding: 0.3rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  font-family: inherit;
-}
-
-.flagged-card__expand-btn:hover {
-  background: rgba(239,68,68,0.1);
-  color: var(--text-primary);
-}
-
-.flagged-card__body {
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.flagged-card__explanation {
-  background: var(--flag-bg);
-  border: 1px solid var(--flag-border);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 1rem;
-  font-size: 0.85rem;
-  line-height: 1.65;
-  color: var(--text-primary);
-  animation: fadeIn 0.2s ease;
-}
-
-.flagged-card__explanation strong { color: var(--flag-amber); }
-
-.flagged-card__status-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
-}
-
-.status-pill--flagged .status-pill__value { color: var(--flag-red); }
-.status-pill--mismatch .status-pill__value { color: var(--flag-amber); }
-
-/* ── Legal Satellite cards ──────────────────────────────────── */
-.legal-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow-card);
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.legal-card--has-challan { border-color: var(--flag-amber-border); }
-
-.legal-card__header {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.challan-row {
-  background: var(--flag-amber-bg);
-  border: 1px solid var(--flag-amber-border);
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
-  font-size: 0.85rem;
-  color: var(--flag-amber);
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* ── Vault cards ────────────────────────────────────────────── */
-.vault-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  box-shadow: var(--shadow-card);
-}
-
-.vault-docs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.75rem;
-}
-
-.vault-doc-tile {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 1rem;
-}
-
-.vault-doc-tile--flagged { border-color: var(--flag-border); }
-.vault-doc-tile--expired { border-color: var(--flag-amber-border); }
-.vault-doc-tile--valid   { border-color: var(--ok-border); }
-
-.vault-doc-tile__label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
-}
-
-.vault-doc-tile__dept {
+.rubber-stamp__sub {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  margin-top: 0.15rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
 }
 
-.vault-doc-tile__status {
-  font-size: 0.73rem;
+/* ── Result Ledger Table ────────────────────────────────────── */
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--rule-line-dark);
+  border-bottom: 1px solid var(--rule-line-dark);
+}
+
+.ledger-table th,
+.ledger-table td {
+  padding: 0.7rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule-line);
+}
+
+.ledger-table th {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 35%;
+}
+
+.ledger-table td {
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.ledger-table tr:last-child th,
+.ledger-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mono-field {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+/* ── Mismatch Foldout Section ───────────────────────────────── */
+.mismatch-docket {
+  border-left: 3px solid var(--flag-ochre);
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  background: #D7D0BF;
+}
+
+.mismatch-docket__toggle {
+  background: none;
+  border: 1px solid var(--flag-ochre);
+  color: var(--flag-ochre);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
   font-weight: 600;
-  margin-top: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.vault-doc-tile__status--valid   { color: var(--ok-400); }
-.vault-doc-tile__status--expired { color: var(--flag-amber); }
-.vault-doc-tile__status--flagged { color: var(--flag-red); }
-
-.vault-flags {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.mismatch-docket__toggle:focus-visible {
+  outline: 2px solid var(--tape-red);
 }
 
-.vault-flag-row {
-  background: var(--flag-bg);
-  border: 1px solid var(--flag-border);
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
-  font-size: 0.82rem;
-  color: var(--text-primary);
+.mismatch-docket__content {
+  margin-top: 0.75rem;
+  font-size: 0.88rem;
   line-height: 1.55;
+  color: var(--ink);
 }
 
-/* ── Section label ───────────────────────────────────────────── */
-.section-label {
-  font-size: 0.72rem;
+/* ── Disclosed Preview Banner (Solid Carbon Slate) ─────────── */
+.seeded-banner-bar {
+  background: var(--carbon-slate);
+  color: #F7F5F0;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--tape-red);
+}
+
+.seeded-banner-bar__title {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
 }
 
-/* ── Loading / Error states ─────────────────────────────────── */
-.state-loading {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  padding: 1.5rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.seeded-banner-bar__text {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #E2DFD7;
 }
 
-.spinner {
-  width: 16px; height: 16px;
-  border: 2px solid var(--border-mid);
-  border-top-color: var(--accent-500);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.state-error {
-  background: var(--flag-bg);
-  border: 1px solid var(--flag-border);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 1rem;
-  color: var(--flag-red);
-  font-size: 0.85rem;
-}
-
-.state-empty {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  padding: 1rem 0;
-}
-
-/* ── Scope disclosure footer ────────────────────────────────── */
-.scope-disclosure {
+/* ── Statutory Footer Scope Disclosure ──────────────────────── */
+.statutory-footer {
   margin-top: 2.5rem;
-  padding: 1rem 1.25rem;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  line-height: 1.7;
+  border-top: 1px solid var(--rule-line-dark);
+  padding-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
 }
 
-.scope-disclosure__title {
+.statutory-footer__title {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.68rem;
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.statutory-footer a {
+  color: var(--tape-red);
+  text-decoration: underline;
+}
+
+.statutory-footer a:focus-visible {
+  outline: 2px solid var(--tape-red);
+}
+
+/* ── Loading / Error States ─────────────────────────────────── */
+.dossier-state-msg {
+  padding: 1.5rem 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.dossier-error-msg {
+  border: 1px solid var(--tape-red);
+  padding: 0.75rem 1rem;
+  color: var(--tape-red);
+  font-weight: 600;
+  margin: 1rem 0;
+}
+
+/* ── Mobile Responsiveness ──────────────────────────────────── */
+@media (max-width: 680px) {
+  .app-shell {
+    margin: 0.5rem auto 1.5rem;
+    padding: 0 0.5rem;
+  }
+  .folder-tabs {
+    margin-left: 0.5rem;
+  }
+  .folder-tab {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  .punch-hole-margin {
+    width: 24px;
+    padding: 1.5rem 0;
+  }
+  .punch-hole {
+    width: 10px;
+    height: 10px;
+  }
+  .dossier-content {
+    padding: 1.25rem 1rem 2rem 1rem;
+  }
+  .dossier-heading__title {
+    font-size: 1.3rem;
+  }
 }

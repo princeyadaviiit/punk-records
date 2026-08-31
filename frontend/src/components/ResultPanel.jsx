@@ -3,30 +3,27 @@ import FlaggedState from './FlaggedState'
 
 /**
  * ResultPanel — dispatches to CleanState or FlaggedState based on the
- * API response. Never passes the full response object through to a
- * generic renderer — always a typed component per result type.
+ * typed API response.
  */
 export default function ResultPanel({ data, loading, error }) {
   if (loading) {
     return (
-      <div className="state-loading">
-        <div className="spinner" />
-        Verifying…
+      <div className="dossier-state-msg" role="status">
+        Retrieving record and executing verification pipeline…
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="state-error" role="alert">
-        ⚠ {error}
+      <div className="dossier-error-msg" role="alert">
+        Statutory query error: {error}
       </div>
     )
   }
 
   if (!data) return null
 
-  // Route to the appropriate card based on the traffic check result
   if (!data.vehicle_match || data.dl_status === 'flagged' || data.dl_status === 'expired') {
     return <FlaggedState data={data} />
   }

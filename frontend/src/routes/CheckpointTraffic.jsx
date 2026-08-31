@@ -12,7 +12,6 @@ export default function CheckpointTraffic() {
   const [error, setError] = useState(null)
   const [citizensLoading, setCitizensLoading] = useState(true)
 
-  // Load citizen list on mount
   useEffect(() => {
     fetch(`${API}/api/citizens`)
       .then(r => r.json())
@@ -20,7 +19,6 @@ export default function CheckpointTraffic() {
       .catch(() => { setCitizensLoading(false) })
   }, [])
 
-  // Fetch traffic check when citizen selection changes
   useEffect(() => {
     if (!citizenId) { setResult(null); setError(null); return }
 
@@ -38,15 +36,23 @@ export default function CheckpointTraffic() {
   }, [citizenId])
 
   return (
-    <div className="page-content">
-      {/* Satellite header communicates scope as a feature, not a limitation */}
-      <div className="satellite-header">
-        <h1 className="satellite-header__title">
-          🚦 Traffic Satellite — Checkpoint View
+    <div>
+      {/* Gazette-style departmental header */}
+      <div className="dossier-heading">
+        <div className="dossier-heading__topline">
+          <span className="dossier-heading__dept">
+            Transport Department — Field Checkpoint Enforcement
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
+            FORM PR-TR-1
+          </span>
+        </div>
+        <h1 className="dossier-heading__title">
+          Traffic Satellite Verification Record
         </h1>
-        <span className="satellite-header__scope">
-          Scope: DL validity · Vehicle registration match · Nothing else
-        </span>
+        <p className="dossier-heading__scope">
+          Statutory Access Scope: Driving licence validity and vehicle registration match only.
+        </p>
       </div>
 
       <CitizenSelect
@@ -58,15 +64,13 @@ export default function CheckpointTraffic() {
 
       <ResultPanel data={result} loading={loading} error={error} />
 
-      {/* Scope disclosure — always visible per rules.md #6 */}
-      <div className="scope-disclosure">
-        <div className="scope-disclosure__title">Access scope — Traffic Satellite</div>
-        This view is structurally limited to DL status and vehicle registration name match.
-        The API response type (<code>TrafficCheckResponse</code>) is incapable of containing
-        KYC, challan, Aadhaar, or other Satellite fields — verifiable by inspecting
-        the <a href={`${API}/docs#/Traffic%20Satellite`} target="_blank" rel="noreferrer"
-        style={{ color: 'var(--accent-400)' }}>OpenAPI schema</a>.
-        · Officer role assumed active (no auth theater for MVP).
+      {/* Statutory Footer */}
+      <div className="statutory-footer">
+        <div className="statutory-footer__title">Access Scope & Privacy Boundary</div>
+        This checkpoint surface is structurally limited to driving licence status and registered vehicle matching. The underlying API response model (<code>TrafficCheckResponse</code>) is structurally incapable of returning tax, Aadhaar, legal, or court records — verifiable via the{' '}
+        <a href={`${API}/docs#/Traffic%20Satellite`} target="_blank" rel="noreferrer">
+          OpenAPI Specification
+        </a>. Officer credentials assumed active for field inspection.
       </div>
     </div>
   )

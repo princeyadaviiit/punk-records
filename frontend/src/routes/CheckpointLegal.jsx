@@ -5,12 +5,11 @@ import SeededBanner from '../components/SeededBanner'
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 /**
- * Legal Satellite checkpoint page.
+ * Legal Satellite checkpoint view.
  *
- * MVP Status: SEEDED PREVIEW — disclosed via SeededBanner (mandatory, unmissable).
- * Reads from the same shared schema as Traffic Satellite (LegalCheckResponse).
- * Structural scope: outstanding challans + court summons only.
- * Cannot contain DL/vehicle or KYC fields — verifiable in OpenAPI schema.
+ * MVP Status: Seeded / static preview (disclosed).
+ * Reads from the same shared schema as Traffic Satellite.
+ * Structural scope: outstanding challans + court summons status only.
  */
 export default function CheckpointLegal() {
   const [citizens, setCitizens] = useState([])
@@ -44,17 +43,26 @@ export default function CheckpointLegal() {
   }, [citizenId])
 
   return (
-    <div className="page-content">
-      <div className="satellite-header">
-        <h1 className="satellite-header__title">
-          ⚖️ Legal Satellite — Checkpoint View
+    <div>
+      {/* Gazette-style departmental header */}
+      <div className="dossier-heading">
+        <div className="dossier-heading__topline">
+          <span className="dossier-heading__dept">
+            Judicial & Traffic Enforcement Division
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
+            FORM PR-LG-2
+          </span>
+        </div>
+        <h1 className="dossier-heading__title">
+          Legal Satellite Enforcement Record
         </h1>
-        <span className="satellite-header__scope">
-          Scope: Outstanding challans · Court summons status · Nothing else
-        </span>
+        <p className="dossier-heading__scope">
+          Statutory Access Scope: Outstanding traffic challans and court summons records only.
+        </p>
       </div>
 
-      {/* Mandatory disclosed-preview banner — per rules.md #6 and design.md §3 */}
+      {/* Mandatory Disclosed Preview Banner */}
       <SeededBanner />
 
       <CitizenSelect
@@ -64,88 +72,85 @@ export default function CheckpointLegal() {
         loading={citizensLoading}
       />
 
-      {/* Loading */}
       {loading && (
-        <div className="state-loading">
-          <div className="spinner" />
-          Fetching legal status…
+        <div className="dossier-state-msg" role="status">
+          Retrieving judicial enforcement records…
         </div>
       )}
 
-      {/* Error */}
-      {error && <div className="state-error" role="alert">⚠ {error}</div>}
+      {error && (
+        <div className="dossier-error-msg" role="alert">
+          Statutory query error: {error}
+        </div>
+      )}
 
-      {/* Result — Legal-specific card, structurally different from Traffic */}
       {result && !loading && (
-        <div className="result-panel">
-          <div className={`legal-card ${result.outstanding_challans_count > 0 ? 'legal-card--has-challan' : ''}`}>
-            <div className="legal-card__header">
-              <span style={{ fontSize: '1.3rem' }}>
-                {result.outstanding_challans_count > 0 || result.court_summons_pending ? '⚠️' : '✅'}
-              </span>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '1rem' }}>{result.citizen_name}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.1rem' }}>
-                  Legal enforcement check
-                </div>
+        <div className="stamp-container">
+          {/* Stamp based on challan / summons existence */}
+          {result.outstanding_challans_count > 0 || result.court_summons_pending ? (
+            <div className="rubber-stamp rubber-stamp--flagged">
+              <div className="rubber-stamp__title">ACTION REQUIRED</div>
+              <div className="rubber-stamp__sub">
+                {result.outstanding_challans_count > 0 ? `${result.outstanding_challans_count} UNPAID CHALLAN(S)` : 'PENDING COURT SUMMONS'}
               </div>
             </div>
+          ) : (
+            <div className="rubber-stamp rubber-stamp--clean">
+              <div className="rubber-stamp__title">CLEAR · NO DUES</div>
+              <div className="rubber-stamp__sub">NO ACTIVE CHALLANS OR SUMMONS</div>
+            </div>
+          )}
 
-            {/* Challan count */}
-            <div className="status-pill">
-              <span>📋</span>
-              <div>
-                <div className="status-pill__label">Outstanding Challans</div>
-                <div className="status-pill__value" style={{
-                  color: result.outstanding_challans_count > 0 ? 'var(--flag-amber)' : 'var(--ok-400)'
+          {/* Ledger Table */}
+          <table className="ledger-table">
+            <tbody>
+              <tr>
+                <th>Subject Name</th>
+                <td>{result.citizen_name}</td>
+              </tr>
+              <tr>
+                <th>Subject Identifier</th>
+                <td className="mono-field">{result.citizen_id}</td>
+              </tr>
+              <tr>
+                <th>Outstanding Challans</th>
+                <td style={{
+                  color: result.outstanding_challans_count > 0 ? 'var(--flag-ochre)' : 'var(--ink)',
+                  fontWeight: result.outstanding_challans_count > 0 ? 700 : 400
                 }}>
                   {result.outstanding_challans_count > 0
-                    ? `${result.outstanding_challans_count} pending`
-                    : 'None'}
-                </div>
-              </div>
-            </div>
-
-            {/* Challan detail if present */}
-            {result.outstanding_challans_count > 0 && (
-              <div className="challan-row">
-                ⚠ {result.outstanding_challans_count} unpaid challan(s) on record —
-                manual verification required before clearing.
-              </div>
-            )}
-
-            {/* Court summons */}
-            <div className="status-pill">
-              <span>🏛️</span>
-              <div>
-                <div className="status-pill__label">Court Summons</div>
-                <div className="status-pill__value" style={{
-                  color: result.court_summons_pending ? 'var(--flag-red)' : 'var(--ok-400)'
+                    ? `${result.outstanding_challans_count} unpaid challan(s) recorded`
+                    : 'Nil (No outstanding dues)'}
+                </td>
+              </tr>
+              <tr>
+                <th>Court Summons Status</th>
+                <td style={{
+                  color: result.court_summons_pending ? 'var(--tape-red)' : 'var(--ink)',
+                  fontWeight: result.court_summons_pending ? 700 : 400
                 }}>
-                  {result.court_summons_pending ? 'Pending' : 'None'}
-                </div>
-              </div>
-            </div>
+                  {result.court_summons_pending ? 'Active Summons Pending' : 'None on record'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-            {/* Summons details if present */}
-            {result.court_summons_pending && result.summons_details?.map(s => (
-              <div key={s.summons_id} className="flagged-card__explanation">
-                <strong>Summons {s.summons_id}:</strong> {s.description} (issued {s.issued_date})
-              </div>
-            ))}
-          </div>
+          {/* Summons Details Docket if present */}
+          {result.court_summons_pending && result.summons_details?.map(s => (
+            <div key={s.summons_id} className="mismatch-docket" style={{ borderLeftColor: 'var(--tape-red)', marginTop: '1rem' }}>
+              <strong>Summons Record No. <span className="mono-field">{s.summons_id}</span>:</strong> {s.description} (Date of issue: {s.issued_date})
+            </div>
+          ))}
         </div>
       )}
 
-      <div className="scope-disclosure">
-        <div className="scope-disclosure__title">Access scope — Legal Satellite</div>
-        This view is structurally limited to challan and summons fields.
-        The response type (<code>LegalCheckResponse</code>) cannot contain DL/vehicle
-        or banking fields — verifiable in the{' '}
-        <a href={`${API}/docs#/Legal%20Satellite%20(Seeded%20Preview)`} target="_blank" rel="noreferrer"
-          style={{ color: 'var(--accent-400)' }}>OpenAPI schema</a>.
-        · This Satellite reads the same shared schema as Traffic — no separate mock dataset.
-        · Full live challan DB integration is Phase B.
+      {/* Statutory Footer */}
+      <div className="statutory-footer">
+        <div className="statutory-footer__title">Access Scope & Privacy Boundary</div>
+        This legal enforcement view is structurally limited to challan count and court summons status. The underlying API response model (<code>LegalCheckResponse</code>) cannot contain driving licence or vehicle registration details — verifiable via the{' '}
+        <a href={`${API}/docs#/Legal%20Satellite%20(Seeded%20Preview)`} target="_blank" rel="noreferrer">
+          OpenAPI Specification
+        </a>. All routes read the same shared schema without mock dataset duplication.
       </div>
     </div>
   )
