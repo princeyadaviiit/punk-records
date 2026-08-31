@@ -1,0 +1,7 @@
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.7.0
+rapidfuzz>=3.9.0
+python-multipart>=0.0.9
+# psycopg2-binary  # Uncomment for Postgres/Supabase mode (DATABASE_URL env var)
+# pytesseract       # Phase B — OCR re-enabled. Disabled for MVP (see ocr/ocr_stub.py)
