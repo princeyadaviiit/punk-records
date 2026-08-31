@@ -4,14 +4,14 @@ import CitizenSelect from '../components/CitizenSelect'
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 /**
- * Vault — read-only citizen view of the same shared graph.
+ * Vault — read-only citizen view of the shared graph.
  *
- * MVP Status: read-only static view. No upload, reorder, or sync affordances
- * are rendered at all — they are intentionally omitted, per design.md §4:
- * "don't build disabled buttons — omit them, so it doesn't read as broken."
+ * Grounded in "The Government File" design language:
+ * Ruled document registry ledger, typewritten serial numbers,
+ * mini status stamps, and cross-verification audit findings.
  *
- * Demonstrates Pillar 2: the same graph that serves the Traffic officer
- * also surfaces the citizen's own document status and flags.
+ * Demonstrates Pillar 2: The same graph that an enforcement officer queries
+ * also serves the citizen's own verification transparency.
  */
 export default function Vault() {
   const [citizens, setCitizens] = useState([])
@@ -43,31 +43,34 @@ export default function Vault() {
       .catch(err => { setError(String(err)); setLoading(false) })
   }, [citizenId])
 
-  const statusIcon = (s) => s === 'valid' ? '✅' : s === 'expired' ? '⏰' : '⚠️'
-
   return (
-    <div className="page-content">
-      <div className="satellite-header">
-        <h1 className="satellite-header__title">
-          🔒 Vault — Citizen Document View
+    <div>
+      {/* Gazette-style departmental header */}
+      <div className="dossier-heading">
+        <div className="dossier-heading__topline">
+          <span className="dossier-heading__dept">
+            Citizen Records Registry — Identity Vault
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
+            FORM PR-CV-3
+          </span>
+        </div>
+        <h1 className="dossier-heading__title">
+          Citizen Document Vault & Audit Record
         </h1>
-        <span className="satellite-header__scope">
-          Scope: Your documents · Your verification flags · Read-only
-        </span>
+        <p className="dossier-heading__scope">
+          Personal record transparency: All registered documents, issuing authorities, and cross-verification flags.
+        </p>
       </div>
 
-      {/* MVP status disclosure */}
-      <div className="seeded-banner" style={{
-        background: 'rgba(59,130,246,0.08)',
-        borderColor: 'rgba(59,130,246,0.3)',
-        color: 'var(--accent-400)'
-      }}>
-        <span className="seeded-banner__icon">📖</span>
-        <span>
-          <strong>Read-only view (MVP)</strong> — upload, sync, and re-verification
-          are Phase B features. This view shows what an officer can see about your
-          documents from the same graph, from your perspective.
-        </span>
+      {/* Mandatory Read-Only Status Disclosure */}
+      <div className="seeded-banner-bar" style={{ borderLeftColor: 'var(--ink)' }}>
+        <div className="seeded-banner-bar__title">
+          Statutory View Mode: Read-Only Record
+        </div>
+        <div className="seeded-banner-bar__text">
+          Read-only citizen audit view (MVP Phase A). Self-triggered document synchronization and re-verification requests are scheduled for Phase B. This view reflects your verified standing across connected Satellites from the single shared knowledge graph.
+        </div>
       </div>
 
       <CitizenSelect
@@ -78,82 +81,94 @@ export default function Vault() {
       />
 
       {loading && (
-        <div className="state-loading">
-          <div className="spinner" />
-          Loading vault…
+        <div className="dossier-state-msg" role="status">
+          Retrieving citizen document registry…
         </div>
       )}
 
-      {error && <div className="state-error" role="alert">⚠ {error}</div>}
+      {error && (
+        <div className="dossier-error-msg" role="alert">
+          Statutory query error: {error}
+        </div>
+      )}
 
       {result && !loading && (
-        <div className="result-panel">
-          <div className="vault-card">
-            {/* Citizen identity */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: '50%',
-                background: 'var(--accent-glow)',
-                border: '1px solid var(--accent-500)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.25rem', flexShrink: 0
-              }}>👤</div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '1.05rem' }}>{result.name}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>DOB: {result.dob}</div>
-              </div>
-            </div>
+        <div className="stamp-container">
+          {/* Citizen Identity Ledger */}
+          <div className="ledger-label">Subject Identification Record</div>
+          <table className="ledger-table" style={{ marginTop: '0.5rem', marginBottom: '1.75rem' }}>
+            <tbody>
+              <tr>
+                <th>Registered Name</th>
+                <td>{result.name}</td>
+              </tr>
+              <tr>
+                <th>Date of Birth</th>
+                <td>{result.dob}</td>
+              </tr>
+              <tr>
+                <th>Citizen Identifier</th>
+                <td className="mono-field">{result.id}</td>
+              </tr>
+            </tbody>
+          </table>
 
-            {/* Documents */}
-            <div>
-              <div className="section-label">Documents on record</div>
-              <div className="vault-docs-grid">
-                {result.documents.map(doc => (
-                  <div
-                    key={doc.doc_id}
-                    className={`vault-doc-tile vault-doc-tile--${doc.status}`}
-                  >
-                    <div className="vault-doc-tile__label">
-                      {statusIcon(doc.status)} {doc.display_label}
+          {/* Document Registry Table */}
+          <div className="ledger-label">Registered Documents On Record ({result.documents.length})</div>
+          <table className="vault-doc-table">
+            <thead>
+              <tr>
+                <th>Document Type</th>
+                <th>Serial / Registration ID</th>
+                <th>Issuing Authority</th>
+                <th>Validation Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result.documents.map(doc => (
+                <tr key={doc.doc_id}>
+                  <td style={{ fontWeight: 600 }}>{doc.display_label}</td>
+                  <td className="mono-field">{doc.doc_id}</td>
+                  <td style={{ color: 'var(--ink-muted)' }}>{doc.department}</td>
+                  <td>
+                    <span className={`mini-stamp mini-stamp--${doc.status}`}>
+                      {doc.status.toUpperCase()}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Cross-Verification Flags / Audit Findings */}
+          <div style={{ marginTop: '2rem' }}>
+            <div className="ledger-label">Cross-Verification Audit Findings</div>
+            {result.verification_flags.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                {result.verification_flags.map((flag, idx) => (
+                  <div key={idx} className="mismatch-docket">
+                    <div>
+                      <strong>Audit Finding — {flag.match_field.toUpperCase()} Field Discrepancy:</strong>
                     </div>
-                    <div className="vault-doc-tile__dept">{doc.department}</div>
-                    <div className={`vault-doc-tile__status vault-doc-tile__status--${doc.status}`}>
-                      {doc.status}
+                    <div style={{ marginTop: '0.35rem', fontSize: '0.88rem' }}>
+                      {flag.explanation}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Cross-verification flags */}
-            {result.verification_flags.length > 0 && (
-              <div>
-                <div className="section-label">⚠ Verification flags</div>
-                <div className="vault-flags">
-                  {result.verification_flags.map((f, i) => (
-                    <div key={i} className="vault-flag-row">
-                      <strong>Field: {f.match_field}</strong> — {f.explanation}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {result.verification_flags.length === 0 && (
-              <div style={{ fontSize: '0.82rem', color: 'var(--ok-400)' }}>
-                ✅ No cross-verification flags — all checked fields match across documents.
+            ) : (
+              <div className="dossier-state-msg" style={{ padding: '0.75rem 0', color: 'var(--stamp-green)', fontStyle: 'normal' }}>
+                All document fields match across issuing departments. No cross-verification flags on record.
               </div>
             )}
           </div>
         </div>
       )}
 
-      <div className="scope-disclosure">
-        <div className="scope-disclosure__title">One graph, two directions</div>
-        The Vault reads from the same <code>documents</code> and <code>cross_verification_results</code> tables
-        as the Traffic and Legal Satellite routes. The same flag that an officer sees as a
-        vehicle mismatch, you see here as a "name field" flag — same graph, different lens.
-        · Upload / sync / reorder are Phase B features.
+      {/* Statutory Footer */}
+      <div className="statutory-footer">
+        <div className="statutory-footer__title">One Graph · Two Directions (Pillar 2)</div>
+        The Citizen Vault queries the same <code>documents</code> and <code>cross_verification_results</code> tables as the Traffic and Legal Satellite routes. A mismatch flagged during a field checkpoint appears here transparently as a document discrepancy — ensuring citizens have equal audit visibility into their own verified identity graph.
       </div>
     </div>
   )

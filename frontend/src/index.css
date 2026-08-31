@@ -471,6 +471,113 @@ html, body, #root {
   margin: 1rem 0;
 }
 
+/* ── Vault Document Registry & Mini Stamps ─────────────────── */
+.vault-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border-top: 1px solid var(--rule-line-dark);
+  border-bottom: 1px solid var(--rule-line-dark);
+}
+
+.vault-doc-table th,
+.vault-doc-table td {
+  padding: 0.65rem 0.6rem;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--rule-line);
+}
+
+.vault-doc-table th {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vault-doc-table td {
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.mini-stamp {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-width: 2px;
+  border-style: solid;
+  line-height: 1.1;
+}
+
+.mini-stamp--valid {
+  border-color: var(--stamp-green);
+  color: var(--stamp-green);
+}
+
+.mini-stamp--flagged {
+  border-color: var(--flag-ochre);
+  color: var(--flag-ochre);
+}
+
+.mini-stamp--expired {
+  border-color: var(--tape-red);
+  color: var(--tape-red);
+}
+
+/* ── Civic Literacy Bridge ─────────────────────────────────── */
+.bridge-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.bridge-provision-card {
+  border: 1px solid var(--rule-line-dark);
+  border-left: 4px solid var(--tape-red);
+  padding: 1.1rem 1.25rem;
+  background: #D7D0BF;
+}
+
+.bridge-provision-card__section-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--tape-red);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.bridge-provision-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+
+.bridge-provision-card__text {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.bridge-provision-card__citation {
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--rule-line);
+  padding-top: 0.4rem;
+  font-style: italic;
+}
+
 /* ── Mobile Responsiveness ──────────────────────────────────── */
 @media (max-width: 680px) {
   .app-shell {
@@ -479,10 +586,11 @@ html, body, #root {
   }
   .folder-tabs {
     margin-left: 0.5rem;
+    flex-wrap: wrap;
   }
   .folder-tab {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
   }
   .punch-hole-margin {
     width: 24px;
@@ -498,4 +606,9 @@ html, body, #root {
   .dossier-heading__title {
     font-size: 1.3rem;
   }
+  .vault-doc-table th:nth-child(3),
+  .vault-doc-table td:nth-child(3) {
+    display: none;
+  }
 }
+

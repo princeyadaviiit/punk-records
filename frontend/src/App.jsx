@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import CheckpointTraffic from './routes/CheckpointTraffic'
 import CheckpointLegal from './routes/CheckpointLegal'
 import Vault from './routes/Vault'
+import CivicLiteracyBridge from './components/CivicLiteracyBridge'
 import './index.css'
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/checkpoint/traffic" element={<CheckpointTraffic />} />
               <Route path="/checkpoint/legal" element={<CheckpointLegal />} />
               <Route path="/vault" element={<Vault />} />
+              <Route path="/civic-literacy" element={<CivicLiteracyBridge />} />
             </Routes>
           </div>
         </main>

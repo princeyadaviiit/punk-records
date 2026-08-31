@@ -29,6 +29,14 @@ export default function Navbar() {
               Citizen Vault
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/civic-literacy"
+              className={({ isActive }) => `folder-tab ${isActive ? 'active' : ''}`}
+            >
+              Civic Literacy Bridge
+            </NavLink>
+          </li>
         </ul>
       </nav>
       <div className="dossier-serial">
