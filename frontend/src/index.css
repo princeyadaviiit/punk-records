@@ -9,7 +9,7 @@
 
 :root {
   /* Core Government File Palette (LIGHT THEME - Default) */
-  --paper:        #DCD6C6; /* base background — aged file-folder tan */
+  --paper:        #FFFFFF; /* base background — aged file-folder tan */
   --paper-dark:   #CCC5B3; /* inactive tab background / deeper manila layer */
   --ink:          #2B2A28; /* primary text — warm charcoal */
   --ink-muted:    #5A5853; /* secondary administrative markings */
@@ -19,7 +19,7 @@
   --carbon-slate: #4B5A6A; /* seeded / disclosed-preview banner */
   --rule-line:    #B8AF98; /* hairline dividers, ruled-paper lines */
   --rule-line-dark: #A49A80;
-  --desk-surface: #C8C1AE; /* desk surface behind dossier */
+  --desk-surface: #FFFFFF; /* desk surface behind dossier */
 
   /* Typography */
   --font-serif: 'Source Serif 4', Georgia, serif;
@@ -113,7 +113,7 @@ html, body, #root {
 }
 
 .folder-tab.active {
-  background: var(--paper);
+  background: #FFFFFF;
   color: var(--ink);
   border: 2px solid var(--ink);
   border-bottom: 2px solid var(--paper); /* Seamless attachment to dossier */
@@ -138,7 +138,7 @@ html, body, #root {
 
 /* ── Main Dossier Sheet ─────────────────────────────────────── */
 .dossier-sheet {
-  background: var(--paper);
+  background: #FFFFFF;
   border: 2px solid var(--ink);
   border-top: none;
   display: flex;
@@ -156,7 +156,7 @@ html, body, #root {
   align-items: center;
   justify-content: space-around;
   padding: 3rem 0;
-  background: var(--paper);
+  background: #FFFFFF;
 }
 
 .punch-hole {
@@ -235,7 +235,7 @@ html, body, #root {
 
 .citizen-select-box select {
   width: 100%;
-  background: var(--paper);
+  background: #FFFFFF;
   border: 1px solid var(--ink);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -665,13 +665,13 @@ html, body, #root {
 
 .role-picker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
 .role-card {
-  background: var(--paper);
+  background: #FFFFFF;
   border: 2px solid var(--rule-line-dark);
   padding: 1.75rem;
   border-radius: 8px;
@@ -754,7 +754,7 @@ html, body, #root {
 }
 
 .login-card {
-  background: var(--paper);
+  background: #FFFFFF;
   border: 2px solid var(--ink);
   padding: 2.5rem;
   max-width: 500px;
@@ -856,7 +856,7 @@ html, body, #root {
 
 .id-type-card:hover {
   border-color: var(--tape-red);
-  background: var(--paper);
+  background: #FFFFFF;
 }
 
 .id-type-card:focus-visible {
@@ -938,7 +938,7 @@ html, body, #root {
 
 .form-input {
   width: 100%;
-  background: var(--paper);
+  background: #FFFFFF;
   border: 2px solid var(--rule-line-dark);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -1689,7 +1689,7 @@ html, body, #root {
 
 .bridge-assistant__input {
   width: 100%;
-  background: var(--paper);
+  background: #FFFFFF;
   border: 2px solid var(--rule-line);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -1816,3 +1816,86 @@ html, body, #root {
   }
 }
 
+
+/* Facts section styling */
+.vault-facts {
+  margin-top: 3rem;
+}
+
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.fact-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fact-card__icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.fact-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 0.5rem;
+}
+
+.fact-card__description {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #6B7280;
+}
+
+/* Document card clickable */
+.document-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.document-card:active {
+  transform: scale(0.98);
+}
+
+.document-card-expanded {
+  grid-column: span 2;
+}
+
+.document-card-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #E5E7EB;
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+.document-card-details__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.document-card-details__label {
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Mobile: Document cards 2 per row */
+@media (max-width: 680px) {
+  .document-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

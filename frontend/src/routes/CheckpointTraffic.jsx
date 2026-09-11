@@ -29,8 +29,8 @@ export default function CheckpointTraffic() {
   const [error, setError] = useState(null)
 
   const handleScan = async () => {
-    // Simulate scan: pick a random citizen from the seeded pool
-    const randomCitizen = SEEDED_CITIZENS[Math.floor(Math.random() * SEEDED_CITIZENS.length)]
+    // Default to Ramesh Kumar for demo (first citizen in seeded pool)
+    const defaultCitizen = SEEDED_CITIZENS[0]
 
     setLoading(true)
     setError(null)
@@ -39,7 +39,7 @@ export default function CheckpointTraffic() {
     try {
       // Note: In production, token would be sent in Authorization header
       // For MVP, endpoint works without token (will be gated in Session 6)
-      const response = await fetch(`http://localhost:8000/api/checkpoint/traffic/${randomCitizen.id}`)
+      const response = await fetch(`http://localhost:8000/api/checkpoint/traffic/${defaultCitizen.id}`)
 
       if (!response.ok) {
         const errorData = await response.json()

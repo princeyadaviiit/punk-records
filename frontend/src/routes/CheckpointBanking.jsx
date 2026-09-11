@@ -28,8 +28,8 @@ export default function CheckpointBanking() {
   const [loading, setLoading] = useState(false)
 
   const handleScan = async () => {
-    // Simulate scan: pick a random citizen from the seeded pool
-    const randomCitizen = SEEDED_CITIZENS[Math.floor(Math.random() * SEEDED_CITIZENS.length)]
+    // Default to Ramesh Kumar for demo (first citizen in seeded pool)
+    const defaultCitizen = SEEDED_CITIZENS[0]
 
     setLoading(true)
     setResult(null)
@@ -39,10 +39,10 @@ export default function CheckpointBanking() {
 
     // Mock KYC verification result
     setResult({
-      citizen_id: randomCitizen.id,
-      citizen_name: randomCitizen.name,
-      aadhaar_number: randomCitizen.aadhaar,
-      pan_number: randomCitizen.pan,
+      citizen_id: defaultCitizen.id,
+      citizen_name: defaultCitizen.name,
+      aadhaar_number: defaultCitizen.aadhaar,
+      pan_number: defaultCitizen.pan,
       aadhaar_status: 'verified',
       pan_status: 'verified',
       address_proof: 'Sector 12, Dwarka, Delhi',
