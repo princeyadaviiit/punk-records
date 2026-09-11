@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import DocumentCard from '../components/DocumentCard'
+import DocumentModal from '../components/DocumentModal'
 import BridgeAssistant from '../components/BridgeAssistant'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -35,7 +36,7 @@ export default function Vault() {
   const [vaultData, setVaultData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [expandedDocId, setExpandedDocId] = useState(null)
+  const [selectedDocument, setSelectedDocument] = useState(null)
 
   useEffect(() => {
     if (!user?.user_id) return
@@ -56,8 +57,12 @@ export default function Vault() {
       })
   }, [user?.user_id])
 
-  const toggleExpand = (docId) => {
-    setExpandedDocId(expandedDocId === docId ? null : docId)
+  const handleDocumentClick = (doc) => {
+    setSelectedDocument(doc)
+  }
+
+  const handleCloseModal = () => {
+    setSelectedDocument(null)
   }
 
   if (!user) {
@@ -120,8 +125,8 @@ export default function Vault() {
             <h3 className="vault-section__title">YOUR VERIFIED DOCUMENTS</h3>
             <div className="document-grid">
               {vaultData.documents.map((doc) => (
-                <div key={doc.doc_id} onClick={() => toggleExpand(doc.doc_id)}>
-                  <DocumentCard document={doc} isExpanded={expandedDocId === doc.doc_id} />
+                <div key={doc.doc_id} onClick={() => handleDocumentClick(doc)}>
+                  <DocumentCard document={doc} />
                 </div>
               ))}
             </div>
@@ -179,6 +184,11 @@ export default function Vault() {
             </p>
           </div>
         </>
+      )}
+
+      {/* Document Modal */}
+      {selectedDocument && (
+        <DocumentModal document={selectedDocument} onClose={handleCloseModal} />
       )}
     </div>
   )
