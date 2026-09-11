@@ -39,16 +39,23 @@ DOC_IDS = {
     "ramesh_dl":    "aaaa0001-0000-0000-0000-000000000001",
     "ramesh_rc":    "aaaa0002-0000-0000-0000-000000000002",
     "ramesh_aadhaar": "aaaa0003-0000-0000-0000-000000000003",
+    "ramesh_pan":   "aaaa0004-0000-0000-0000-000000000004",
     # Priya Sharma documents
     "priya_dl":     "bbbb0001-0000-0000-0000-000000000001",
     "priya_rc":     "bbbb0002-0000-0000-0000-000000000002",
+    "priya_aadhaar": "bbbb0003-0000-0000-0000-000000000003",
+    "priya_pan":    "bbbb0004-0000-0000-0000-000000000004",
     # Amit Patel documents
     "amit_dl":      "cccc0001-0000-0000-0000-000000000001",
     "amit_rc":      "cccc0002-0000-0000-0000-000000000002",
     "amit_challan": "cccc0003-0000-0000-0000-000000000003",
+    "amit_aadhaar": "cccc0004-0000-0000-0000-000000000004",
+    "amit_pan":     "cccc0005-0000-0000-0000-000000000005",
     # Sunita Rao documents
     "sunita_dl":    "dddd0001-0000-0000-0000-000000000001",
     "sunita_rc":    "dddd0002-0000-0000-0000-000000000002",
+    "sunita_aadhaar": "dddd0003-0000-0000-0000-000000000003",
+    "sunita_pan":   "dddd0004-0000-0000-0000-000000000004",
 }
 
 CVR_IDS = {
@@ -143,6 +150,18 @@ DOCUMENTS = [
         "status":     "valid",
         "department": "UIDAI",
     },
+    {
+        "id":          DOC_IDS["ramesh_pan"],
+        "citizen_id":  CITIZEN_IDS["ramesh_kumar"],
+        "doc_type":    "PAN",
+        "fields": json.dumps({
+            "pan_number": "ABCDE1234F",
+            "name":       "Ramesh Kumar",
+            "dob":        "1985-03-14",
+        }),
+        "status":     "valid",
+        "department": "Income Tax Department",
+    },
     # -----------------------------------------------------------------------
     # PRIYA SHARMA — Clean state
     # -----------------------------------------------------------------------
@@ -175,6 +194,31 @@ DOCUMENTS = [
         }),
         "status":     "valid",
         "department": "RTO",
+    },
+    {
+        "id":          DOC_IDS["priya_aadhaar"],
+        "citizen_id":  CITIZEN_IDS["priya_sharma"],
+        "doc_type":    "AADHAAR",
+        "fields": json.dumps({
+            "aadhaar_number": "234567890123",
+            "name":           "Priya Sharma",
+            "dob":            "1990-07-22",
+            "address":        "45 Connaught Place, New Delhi, DL 110001",
+        }),
+        "status":     "valid",
+        "department": "UIDAI",
+    },
+    {
+        "id":          DOC_IDS["priya_pan"],
+        "citizen_id":  CITIZEN_IDS["priya_sharma"],
+        "doc_type":    "PAN",
+        "fields": json.dumps({
+            "pan_number": "FGHIJ5678K",
+            "name":       "Priya Sharma",
+            "dob":        "1990-07-22",
+        }),
+        "status":     "valid",
+        "department": "Income Tax Department",
     },
     # -----------------------------------------------------------------------
     # AMIT PATEL — Clean traffic docs, outstanding challan
@@ -224,6 +268,31 @@ DOCUMENTS = [
         "status":     "flagged",
         "department": "Traffic Police",
     },
+    {
+        "id":          DOC_IDS["amit_aadhaar"],
+        "citizen_id":  CITIZEN_IDS["amit_patel"],
+        "doc_type":    "AADHAAR",
+        "fields": json.dumps({
+            "aadhaar_number": "345678901234",
+            "name":           "Amit Patel",
+            "dob":            "1978-11-05",
+            "address":        "78 Satellite Road, Ahmedabad, GJ 380015",
+        }),
+        "status":     "valid",
+        "department": "UIDAI",
+    },
+    {
+        "id":          DOC_IDS["amit_pan"],
+        "citizen_id":  CITIZEN_IDS["amit_patel"],
+        "doc_type":    "PAN",
+        "fields": json.dumps({
+            "pan_number": "KLMNO9012P",
+            "name":       "Amit Patel",
+            "dob":        "1978-11-05",
+        }),
+        "status":     "valid",
+        "department": "Income Tax Department",
+    },
     # -----------------------------------------------------------------------
     # SUNITA RAO — Fully clean
     # -----------------------------------------------------------------------
@@ -256,6 +325,31 @@ DOCUMENTS = [
         }),
         "status":     "valid",
         "department": "RTO",
+    },
+    {
+        "id":          DOC_IDS["sunita_aadhaar"],
+        "citizen_id":  CITIZEN_IDS["sunita_rao"],
+        "doc_type":    "AADHAAR",
+        "fields": json.dumps({
+            "aadhaar_number": "456789012345",
+            "name":           "Sunita Rao",
+            "dob":            "1995-01-30",
+            "address":        "23 MG Road, Bangalore, KA 560001",
+        }),
+        "status":     "valid",
+        "department": "UIDAI",
+    },
+    {
+        "id":          DOC_IDS["sunita_pan"],
+        "citizen_id":  CITIZEN_IDS["sunita_rao"],
+        "doc_type":    "PAN",
+        "fields": json.dumps({
+            "pan_number": "QRSTU3456V",
+            "name":       "Sunita Rao",
+            "dob":        "1995-01-30",
+        }),
+        "status":     "valid",
+        "department": "Income Tax Department",
     },
 ]
 

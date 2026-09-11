@@ -6,7 +6,7 @@ import LoginCitizen from './routes/LoginCitizen'
 import LoginOfficer from './routes/LoginOfficer'
 import Navbar from './components/Navbar'
 import CheckpointTraffic from './routes/CheckpointTraffic'
-import CheckpointLegal from './routes/CheckpointLegal'
+import CheckpointBanking from './routes/CheckpointBanking'
 import Vault from './routes/Vault'
 import CivicLiteracyBridge from './components/CivicLiteracyBridge'
 import './index.css'
@@ -30,9 +30,9 @@ export default function App() {
                 <CheckpointTraffic />
               </AppShell>
             } />
-            <Route path="/checkpoint/legal" element={
+            <Route path="/checkpoint/banking" element={
               <AppShell>
-                <CheckpointLegal />
+                <CheckpointBanking />
               </AppShell>
             } />
             <Route path="/vault" element={
