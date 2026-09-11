@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import ThemeToggle from './ThemeToggle'
 
 export default function Navbar() {
   return (
@@ -39,8 +40,11 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
-      <div className="dossier-serial">
-        DOSSIER NO. PR-2026-MVP
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div className="dossier-serial">
+          DOSSIER NO. PR-2026-MVP
+        </div>
+        <ThemeToggle />
       </div>
     </header>
   )

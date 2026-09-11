@@ -1,13 +1,17 @@
 """
-Punk Records — Seed Dataset (Phase A MVP)
+Punk Records — Seed Dataset (Phase A MVP + Phase 2 Redesign)
 
 4 seeded citizens:
-  1. Ramesh Kumar  — PLANTED NAME MISMATCH: DL "Ramesh Kumar" vs RC "Ramesh Kumaar"
-                     match_score ~84.6 (RapidFuzz ratio), below_threshold = True
+  1. Ramesh Kumar  — PLANTED NAME MISMATCH: DL "Ramesh Kumar" vs RC "Ram Kumar"
+                     match_score ~85.7 (RapidFuzz ratio), below_threshold = True
                      Precomputed into cross_verification_results — demo-critical.
   2. Priya Sharma  — Clean. DL + RC names match 100%, documents valid.
   3. Amit Patel    — Clean DL + RC. Has an outstanding CHALLAN (Legal Satellite).
   4. Sunita Rao    — Clean. All documents valid. No flags.
+
+4 seeded officers (Phase 2 redesign):
+  - 2 Traffic officers (badge IDs: TRF001, TRF002)
+  - 2 Banking officers (badge IDs: BNK001, BNK002)
 
 Full 10×10×10 cross-referenced dataset is Phase B.
 """
@@ -15,6 +19,7 @@ Full 10×10×10 cross-referenced dataset is Phase B.
 import json
 import uuid
 from datetime import date
+import bcrypt
 
 from app.db.client import get_db, execute, fetchone
 
@@ -49,6 +54,13 @@ DOC_IDS = {
 CVR_IDS = {
     # The demo-critical precomputed mismatch row
     "ramesh_name_mismatch": "eeee0001-0000-0000-0000-000000000001",
+}
+
+OFFICER_IDS = {
+    "traffic_rajesh":  "ffff0001-0000-0000-0000-000000000001",
+    "traffic_anjali":  "ffff0002-0000-0000-0000-000000000002",
+    "banking_suresh":  "ffff0003-0000-0000-0000-000000000003",
+    "banking_kavita":  "ffff0004-0000-0000-0000-000000000004",
 }
 
 # ---------------------------------------------------------------------------
@@ -300,6 +312,50 @@ CROSS_VERIFICATION_RESULTS = [
     },
 ]
 
+# ---------------------------------------------------------------------------
+# Officers (Phase 2 redesign — role-based authentication)
+# Passwords are bcrypt-hashed at module load time.
+# Plaintext reference: "traffic123" for traffic, "banking123" for banking.
+# ---------------------------------------------------------------------------
+def _hash_password(password: str) -> str:
+    """Hash a password using bcrypt."""
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+OFFICERS = [
+    {
+        "id":            OFFICER_IDS["traffic_rajesh"],
+        "badge_id":      "TRF001",
+        "password_hash": _hash_password("traffic123"),
+        "role":          "traffic",
+        "name":          "Rajesh Mehta",
+        "department":    "Traffic Police - Mumbai Division",
+    },
+    {
+        "id":            OFFICER_IDS["traffic_anjali"],
+        "badge_id":      "TRF002",
+        "password_hash": _hash_password("traffic123"),
+        "role":          "traffic",
+        "name":          "Anjali Singh",
+        "department":    "Traffic Police - Delhi Division",
+    },
+    {
+        "id":            OFFICER_IDS["banking_suresh"],
+        "badge_id":      "BNK001",
+        "password_hash": _hash_password("banking123"),
+        "role":          "banking",
+        "name":          "Suresh Kumar",
+        "department":    "State Bank of India - KYC Division",
+    },
+    {
+        "id":            OFFICER_IDS["banking_kavita"],
+        "badge_id":      "BNK002",
+        "password_hash": _hash_password("banking123"),
+        "role":          "banking",
+        "name":          "Kavita Reddy",
+        "department":    "HDFC Bank - Compliance Division",
+    },
+]
+
 
 # ---------------------------------------------------------------------------
 # Seeder entrypoint
@@ -315,6 +371,9 @@ def seed_all(db) -> None:
 
     for cvr in CROSS_VERIFICATION_RESULTS:
         _insert_cvr(db, cvr, pg)
+
+    for officer in OFFICERS:
+        _insert_officer(db, officer, pg)
 
 
 def _is_postgres(db) -> bool:
@@ -370,5 +429,27 @@ def _insert_cvr(db, cvr: dict, pg: bool = False) -> None:
             (
                 cvr["id"], cvr["citizen_id"], cvr["doc_a_id"], cvr["doc_b_id"],
                 cvr["match_field"], cvr["match_score"], cvr["below_threshold"], cvr["explanation"],
+            ),
+        )
+
+
+def _insert_officer(db, officer: dict, pg: bool = False) -> None:
+    """Insert officer account (Phase 2 redesign)."""
+    if pg:
+        db.execute(
+            """INSERT INTO officers (id, badge_id, password_hash, role, name, department)
+               VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (id) DO NOTHING""",
+            (
+                officer["id"], officer["badge_id"], officer["password_hash"],
+                officer["role"], officer["name"], officer["department"],
+            ),
+        )
+    else:
+        db.execute(
+            """INSERT OR IGNORE INTO officers (id, badge_id, password_hash, role, name, department)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (
+                officer["id"], officer["badge_id"], officer["password_hash"],
+                officer["role"], officer["name"], officer["department"],
             ),
         )

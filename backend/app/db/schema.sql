@@ -63,3 +63,20 @@ CREATE TABLE IF NOT EXISTS cross_verification_results (
 );
 
 CREATE INDEX IF NOT EXISTS idx_cvr_citizen_id ON cross_verification_results(citizen_id);
+
+-- ============================================================
+-- officers
+-- Authentication table for Traffic and Banking officers.
+-- Phase 2 redesign: role-based login for checkpoint views.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS officers (
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    badge_id      TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role          TEXT NOT NULL CHECK (role IN ('traffic', 'banking')),
+    name          TEXT NOT NULL,
+    department    TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_officers_badge_id ON officers(badge_id);
+CREATE INDEX IF NOT EXISTS idx_officers_role ON officers(role);

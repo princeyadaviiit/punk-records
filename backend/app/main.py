@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.client import get_db
 from app.seed.seed_data import seed_all
-from app.routes import citizens, checkpoint_traffic, checkpoint_legal, vault
+from app.routes import auth, citizens, checkpoint_traffic, checkpoint_legal, vault
 
 from contextlib import asynccontextmanager
 
@@ -50,7 +50,9 @@ app.add_middleware(
 
 # ---------------------------------------------------------------------------
 # Router registration — routers are declared here in dependency order
+# Phase 2: auth router added first (foundational service)
 # ---------------------------------------------------------------------------
+app.include_router(auth.router)
 app.include_router(citizens.router)
 app.include_router(checkpoint_traffic.router)
 app.include_router(checkpoint_legal.router)

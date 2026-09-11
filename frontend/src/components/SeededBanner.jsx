@@ -1,15 +1,18 @@
 /**
- * SeededBanner — mandatory disclosure for seeded/preview Satellites.
- * Solid --carbon-slate bar with high-contrast type.
+ * Punk Records — Seeded Banner Component (Phase 2 Redesign)
+ *
+ * Disclosed preview banner for seeded/static Satellites.
+ * Consistent with existing seeded-banner-bar styling.
  */
-export default function SeededBanner() {
+
+export default function SeededBanner({ title, text }) {
   return (
-    <div className="seeded-banner-bar" role="status" aria-live="polite">
+    <div className="seeded-banner-bar">
       <div className="seeded-banner-bar__title">
-        Administrative Notice: Seeded Preview
+        {title || 'Seeded Preview'}
       </div>
       <div className="seeded-banner-bar__text">
-        Seeded preview — live cross-Satellite sync is the next milestone. This view demonstrates the purpose-scoped access pattern on an enforcement Satellite; challan and court summons data are retrieved from demonstration seed records.
+        {text || 'This view contains seeded data for demonstration purposes.'}
       </div>
     </div>
   )

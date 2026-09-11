@@ -1,76 +1,132 @@
-import { useState, useEffect } from 'react'
-import CitizenSelect from '../components/CitizenSelect'
-import ResultPanel from '../components/ResultPanel'
+/**
+ * Punk Records — Traffic Checkpoint (Phase 2 Redesign)
+ *
+ * Dark terminal aesthetic matching reference screenshots.
+ * Implements scan simulation + scoped satellite cards + locked card.
+ */
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
+import { api } from '../lib/api'
+import RoleBanner from '../components/RoleBanner'
+import ScanButton from '../components/ScanButton'
+import SatelliteCard from '../components/SatelliteCard'
+import LockedCard from '../components/LockedCard'
+import SeededBanner from '../components/SeededBanner'
+
+// Simulated citizen pool for scan (using seeded data from backend)
+const SEEDED_CITIZENS = [
+  { id: '11111111-0000-0000-0000-000000000001', name: 'Ramesh Kumar' },
+  { id: '22222222-0000-0000-0000-000000000002', name: 'Priya Sharma' },
+  { id: '33333333-0000-0000-0000-000000000003', name: 'Amit Patel' },
+  { id: '44444444-0000-0000-0000-000000000004', name: 'Sunita Rao' },
+]
 
 export default function CheckpointTraffic() {
-  const [citizens, setCitizens] = useState([])
-  const [citizenId, setCitizenId] = useState('')
+  const { user } = useAuth()
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [citizensLoading, setCitizensLoading] = useState(true)
 
-  useEffect(() => {
-    fetch(`${API}/api/citizens`)
-      .then(r => r.json())
-      .then(data => { setCitizens(data); setCitizensLoading(false) })
-      .catch(() => { setCitizensLoading(false) })
-  }, [])
-
-  useEffect(() => {
-    if (!citizenId) { setResult(null); setError(null); return }
+  const handleScan = async () => {
+    // Simulate scan: pick a random citizen from the seeded pool
+    const randomCitizen = SEEDED_CITIZENS[Math.floor(Math.random() * SEEDED_CITIZENS.length)]
 
     setLoading(true)
     setError(null)
     setResult(null)
 
-    fetch(`${API}/api/checkpoint/traffic/${citizenId}`)
-      .then(r => {
-        if (!r.ok) return r.json().then(e => Promise.reject(e.detail || 'Request failed'))
-        return r.json()
-      })
-      .then(data => { setResult(data); setLoading(false) })
-      .catch(err => { setError(String(err)); setLoading(false) })
-  }, [citizenId])
+    try {
+      // Note: In production, token would be sent in Authorization header
+      // For MVP, endpoint works without token (will be gated in Session 6)
+      const response = await fetch(`http://localhost:8000/api/checkpoint/traffic/${randomCitizen.id}`)
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Verification failed')
+      }
+
+      const data = await response.json()
+      setResult(data)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div>
-      {/* Gazette-style departmental header */}
-      <div className="dossier-heading">
-        <div className="dossier-heading__topline">
-          <span className="dossier-heading__dept">
-            Transport Department — Field Checkpoint Enforcement
-          </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
-            FORM PR-TR-1
-          </span>
+    <div className="checkpoint-container">
+      <RoleBanner role="traffic" name={user?.name} />
+
+      <h1 className="checkpoint-title">Traffic Checkpoint</h1>
+      <p className="checkpoint-subtitle">Enforcement Surface v1.0</p>
+
+      <ScanButton onScanComplete={handleScan} disabled={loading} />
+
+      {loading && (
+        <div className="dossier-state-msg">Processing verification...</div>
+      )}
+
+      {error && (
+        <div className="dossier-error-msg">{error}</div>
+      )}
+
+      {result && (
+        <div className="satellite-cards-grid">
+          {/* Driver Verification Card */}
+          <SatelliteCard
+            title="Driver Verification"
+            icon="🪪"
+            status={result.dl_status === 'valid' ? 'verified' : 'flagged'}
+            statusLabel={result.dl_status === 'valid' ? 'VERIFIED' : 'FLAGGED'}
+            fields={[
+              { label: 'License No.', value: result.dl_number || 'N/A' },
+              { label: 'Validity', value: result.dl_validity || 'N/A' },
+              { label: 'Status', value: result.dl_status || 'N/A' },
+            ]}
+          />
+
+          {/* Vehicle Match Card */}
+          <SatelliteCard
+            title="Vehicle Match"
+            icon="🚗"
+            status={result.vehicle_match === 'consistent' ? 'matched' : 'flagged'}
+            statusLabel={result.vehicle_match === 'consistent' ? 'MATCHED' : 'MISMATCH'}
+            fields={[
+              { label: 'Reg Number', value: result.vehicle_no || 'N/A' },
+              { label: 'Owner Link', value: result.vehicle_match || 'N/A' },
+            ]}
+          />
+
+          {/* Locked Card - Fields This Satellite Cannot See */}
+          <LockedCard
+            title="Financial & Legal Data"
+            hint="This Satellite cannot decrypt PAN, Aadhaar, court records, or tax data"
+          />
+
+          {/* Mismatch Details if Flagged */}
+          {result.mismatches && result.mismatches.length > 0 && (
+            <div className="mismatch-docket">
+              <h4 style={{ marginBottom: '0.75rem', color: 'var(--flag-ochre)', fontWeight: 700 }}>
+                ⚠️ Verification Notes
+              </h4>
+              {result.mismatches.map((mismatch, i) => (
+                <p key={i} style={{ fontSize: '0.88rem', lineHeight: 1.55, marginTop: '0.5rem' }}>
+                  {mismatch.explanation}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
-        <h1 className="dossier-heading__title">
-          Traffic Satellite Verification Record
-        </h1>
-        <p className="dossier-heading__scope">
-          Statutory Access Scope: Driving licence validity and vehicle registration match only.
+      )}
+
+      {/* Zero Overreach Footer */}
+      <div className="zero-overreach-footer">
+        <div className="zero-overreach-footer__icon">🔒</div>
+        <p className="zero-overreach-footer__text">
+          <strong>Zero Overreach:</strong> Only scoped data is decrypted.
         </p>
-      </div>
-
-      <CitizenSelect
-        citizens={citizens}
-        value={citizenId}
-        onChange={setCitizenId}
-        loading={citizensLoading}
-      />
-
-      <ResultPanel data={result} loading={loading} error={error} />
-
-      {/* Statutory Footer */}
-      <div className="statutory-footer">
-        <div className="statutory-footer__title">Access Scope & Privacy Boundary</div>
-        This checkpoint surface is structurally limited to driving licence status and registered vehicle matching. The underlying API response model (<code>TrafficCheckResponse</code>) is structurally incapable of returning tax, Aadhaar, legal, or court records — verifiable via the{' '}
-        <a href={`${API}/docs#/Traffic%20Satellite`} target="_blank" rel="noreferrer">
-          OpenAPI Specification
-        </a>. Officer credentials assumed active for field inspection.
       </div>
     </div>
   )
