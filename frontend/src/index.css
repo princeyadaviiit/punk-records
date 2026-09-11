@@ -1899,3 +1899,120 @@ html, body, #root {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ── Dark Theme - Vault & Document Cards ──────────────────────── */
+[data-theme="dark"] .document-card {
+  background: var(--paper-dark);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .document-card:hover {
+  border-color: var(--rule-line-dark);
+}
+
+[data-theme="dark"] .document-card__status-dot {
+  border-color: var(--paper-dark);
+}
+
+[data-theme="dark"] .fact-card {
+  background: var(--paper-dark);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .fact-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .vault-footer {
+  background: var(--paper-dark);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .bridge-assistant {
+  background: var(--paper-dark);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .bridge-assistant__input {
+  background: var(--paper);
+  border-color: var(--rule-line);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .verification-flag-card {
+  background: #374151;
+  border-left-color: var(--flag-ochre);
+}
+
+[data-theme="dark"] .role-card {
+  background: var(--paper-dark);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .role-card--enabled:hover {
+  background: var(--paper);
+  border-color: var(--tape-red);
+}
+
+[data-theme="dark"] .login-card {
+  background: var(--paper-dark);
+  border-color: var(--rule-line-dark);
+}
+
+[data-theme="dark"] .form-input {
+  background: var(--paper);
+  border-color: var(--rule-line);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .id-type-card {
+  background: var(--paper);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .id-type-card:hover {
+  background: var(--paper-dark);
+}
+
+[data-theme="dark"] .satellite-card {
+  background: var(--paper);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .locked-card {
+  background: var(--paper);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .dossier-sheet {
+  background: var(--paper);
+}
+
+[data-theme="dark"] .punch-hole-margin {
+  background: var(--paper);
+}
+
+[data-theme="dark"] .folder-tab.active {
+  background: var(--paper);
+  border-color: var(--ink);
+  border-bottom-color: var(--paper);
+}
+
+[data-theme="dark"] .document-card-details {
+  border-top-color: var(--rule-line);
+}
+
+[data-theme="dark"] .login-disclosure {
+  background: var(--paper);
+  border-left-color: var(--carbon-slate);
+}
+
+[data-theme="dark"] .officer-login-hint {
+  background: var(--paper);
+  border-color: var(--rule-line);
+}
+
+[data-theme="dark"] .login-form__selected-type {
+  background: var(--paper);
+  border-color: var(--rule-line);
+}

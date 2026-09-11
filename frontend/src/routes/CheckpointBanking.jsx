@@ -3,9 +3,6 @@
  *
  * KYC verification checkpoint for banking officers.
  * Dark terminal aesthetic with scan simulation.
- *
- * MVP Note: This is the seeded/disclosed Satellite per TRD.md §2.
- * Carries seeded banner indicating preview status.
  */
 
 import { useState } from 'react'
@@ -16,11 +13,17 @@ import SatelliteCard from '../components/SatelliteCard'
 import LockedCard from '../components/LockedCard'
 import SeededBanner from '../components/SeededBanner'
 
-// Simulated citizen pool for scan (using seeded data from backend)
-const SEEDED_CITIZENS = [
-  { id: '11111111-0000-0000-0000-000000000001', name: 'Ramesh Kumar', aadhaar: 'XXXX-XXXX-2346', pan: 'ABCDE1234F' },
-  { id: '22222222-0000-0000-0000-000000000002', name: 'Priya Sharma', aadhaar: 'XXXX-XXXX-5678', pan: 'PQRST5678M' },
-]
+// Mock data for Ramesh Kumar
+const RAMESH_KUMAR_MOCK = {
+  citizen_id: '11111111-0000-0000-0000-000000000001',
+  citizen_name: 'Ramesh Kumar',
+  aadhaar_number: 'XXXX-XXXX-2346',
+  pan_number: 'ABCDE1234F',
+  aadhaar_status: 'verified',
+  pan_status: 'verified',
+  address_proof: 'Sector 12, Dwarka, Delhi',
+  verified_via: 'Utility Bill',
+}
 
 export default function CheckpointBanking() {
   const { user } = useAuth()
@@ -28,27 +31,14 @@ export default function CheckpointBanking() {
   const [loading, setLoading] = useState(false)
 
   const handleScan = async () => {
-    // Default to Ramesh Kumar for demo (first citizen in seeded pool)
-    const defaultCitizen = SEEDED_CITIZENS[0]
-
     setLoading(true)
     setResult(null)
 
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 800))
 
-    // Mock KYC verification result
-    setResult({
-      citizen_id: defaultCitizen.id,
-      citizen_name: defaultCitizen.name,
-      aadhaar_number: defaultCitizen.aadhaar,
-      pan_number: defaultCitizen.pan,
-      aadhaar_status: 'verified',
-      pan_status: 'verified',
-      address_proof: 'Sector 12, Dwarka, Delhi',
-      verified_via: 'Utility Bill',
-    })
-
+    // Use mock data for Ramesh Kumar
+    setResult(RAMESH_KUMAR_MOCK)
     setLoading(false)
   }
 
